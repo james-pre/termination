@@ -1,3 +1,3 @@
-import { exec } from '../lib/exec.js';
+import { exec } from 'lib:exec';
 
 await exec('/bin/sh.js');

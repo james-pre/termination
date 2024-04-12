@@ -1,24 +1,25 @@
-import { join } from '../lib/path.js';
-import { lstat, readdir, realpath } from '../lib/fs.js';
-import { println } from '../lib/io.js';
+import { join } from 'lib:path';
+import fs from 'lib:fs';
+import { println } from 'lib:io';
 
 async function color(dir: string, entry: string): Promise<string> {
 	try {
 		const path = join(dir, entry);
-		const stats = await lstat(await realpath(path));
+		const stats = await fs.promises.lstat(await fs.promises.realpath(path));
 
-		const color = entry.endsWith('.js') ? 32 : stats.isDirectory() ? 34 : stats.isSymbolicLink() ? 36 : 0;
-
-		return `\x1b[${color}m${entry}\x1b[0m`;
-		/*if (stats.isDirectory()) {
+		if (stats.isSymbolicLink()) {
+			return `\x1b[36m${entry}\x1b[0m`;
+		}
+		
+		if (stats.isDirectory()) {
 			return `\x1b[34m${entry}\x1b[0m`;
 		}
 
 		if (entry.endsWith('.js')) {
 			return `\x1b[32m${entry}\x1b[0m`;
-		}*/
+		}
 
-		//return entry;
+		return entry;
 	} catch (e) {
 		return entry;
 	}
@@ -35,7 +36,7 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 	const dir = args.at(-1) || '.';
 
 	const entries = [];
-	for (const entry of await readdir(dir)) {
+	for (const entry of await fs.promises.readdir(dir)) {
 		const colored = await color(dir, entry);
 		entries.push(colored);
 	}

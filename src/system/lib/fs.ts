@@ -5,10 +5,11 @@ import { Fetch } from '@zenfs/fetch';
 import { join } from './path.js';
 
 export * from '@zenfs/core';
-export * from '@zenfs/core/emulation/constants.js';
-export * from '@zenfs/core/emulation/promises.js';
 
-const fetchfs = await resolveBackend({ backend: Fetch, baseUrl: `//${location.host}/dist/system` });
+import fs from '@zenfs/core';
+export default fs;
+
+const fetchfs = await resolveBackend({ backend: Fetch, baseUrl: '/dist/system' });
 
 export const prefixUrl = fetchfs.prefixUrl;
 

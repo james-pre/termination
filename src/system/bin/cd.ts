@@ -1,4 +1,4 @@
-import { cd } from '../lib/path.js';
+import { cd } from 'lib:path';
 
 export function main(_: string, dir: string = '.'): number {
 	cd(dir);

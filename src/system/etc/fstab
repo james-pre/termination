@@ -1,0 +1,4 @@
+/ Storage
+/sys Fetch { "baseUrl": "/dist/system" }
+/home IndexedDB
+/tmp InMemory

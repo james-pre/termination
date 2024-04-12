@@ -1,5 +1,5 @@
-import { println } from '../lib/io.js';
-import { current_user } from '../lib/user.js';
+import { println } from 'lib:io';
+import { current_user } from 'lib:user';
 
 export async function main(): Promise<number> {
 	try {

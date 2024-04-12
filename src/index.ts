@@ -1,6 +1,6 @@
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
-import { exec } from './system/lib/exec.js';
+import { exec } from 'lib:exec';
 
 const tty = (globalThis.tty = new Terminal());
 const fitAddon = new FitAddon();

@@ -1,6 +1,6 @@
-import { println } from '../lib/io.js';
+import { println } from 'lib:io';
 
-export function main(_: string, ...data: string[]): number {
-	println(data.join(' '));
+export function main(_: string, ...args: string[]): number {
+	println(args.join(' '));
 	return 0;
 }

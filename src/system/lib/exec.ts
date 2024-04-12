@@ -1,4 +1,4 @@
-import { readFile, stat, X_OK } from './fs.js';
+import fs from './fs.js';
 
 export async function _exec_external(url: string, ...args: string[]): Promise<number> {
 	const module = await import(url);
@@ -7,12 +7,12 @@ export async function _exec_external(url: string, ...args: string[]): Promise<nu
 }
 
 export async function exec(path: string, ...args: string[]): Promise<number> {
-	const stats = await stat(path);
+	const stats = await fs.promises.stat(path);
 	if (!stats.isFile()) {
 		return 1;
 	}
 
-	const contents = await readFile(path, { flag: X_OK, encoding: 'utf8' });
+	const contents = await fs.promises.readFile(path, { flag: fs.constants.X_OK, encoding: 'utf8' });
 
 	return await _exec_external(URL.createObjectURL(new Blob([contents], { type: 'text/javascript' })), ...args);
 }

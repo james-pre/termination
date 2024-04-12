@@ -1,4 +1,4 @@
-import { readFile } from './fs.js';
+import fs from './fs.js';
 
 import { cred } from '@zenfs/core/emulation/shared.js';
 export { cred };
@@ -22,7 +22,7 @@ export const _root: User = {
 
 export async function get_users(): Promise<Set<User>> {
 	const users = new Set<User>();
-	const passwd = await readFile('/etc/passwd', 'utf8');
+	const passwd = await fs.promises.readFile('/etc/passwd', 'utf8');
 	for (const line of passwd.split('\n')) {
 		const [name, , uid, gid, description, home, shell] = line.split(':');
 		users.add({

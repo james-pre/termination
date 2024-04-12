@@ -1,9 +1,9 @@
-import { env_get } from '../lib/env.js';
-import { exec } from '../lib/exec.js';
-import { ErrorStrings, readdir } from '../lib/fs.js';
-import { print, println, tty } from '../lib/io.js';
-import { basename, pwd, parse, resolve } from '../lib/path.js';
-import { User, _root, current_user } from '../lib/user.js';
+import { env_get } from 'lib:env';
+import { exec } from 'lib:exec';
+import { ErrorStrings, fs } from 'lib:fs';
+import { print, println, tty } from 'lib:io';
+import { basename, pwd, parse, resolve } from 'lib:path';
+import { User, _root, current_user } from 'lib:user';
 
 /**
  * The index for which input is being shown
@@ -102,7 +102,7 @@ async function on_line(...args: string[]): Promise<number> {
 
 	for (const dir of env_get('PATH').split(':')) {
 		try {
-			for (const file of await readdir(dir)) {
+			for (const file of await fs.promises.readdir(dir)) {
 				if (parse(file).name == command) {
 					path = resolve(dir, file);
 					break;
@@ -111,6 +111,10 @@ async function on_line(...args: string[]): Promise<number> {
 		} finally {
 			// ignore directories that can't be stated
 		}
+	}
+
+	for(const [i, arg] of args.entries()) {
+		args[i] = arg.replaceAll(/\$([\w_]+)/gmi, (_, key) => env_get(key));
 	}
 
 	if (!path) {

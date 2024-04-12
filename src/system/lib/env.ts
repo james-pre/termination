@@ -20,6 +20,10 @@ export function env_has(key: string): boolean {
 	return env.has(key);
 }
 
+export function env_keys(): string[] {
+	return [...env.keys()];
+}
+
 if (!env_get('PATH')) {
 	env_set('PATH', '.:/sbin:/bin');
 }
