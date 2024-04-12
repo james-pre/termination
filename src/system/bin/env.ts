@@ -10,7 +10,7 @@ export function main(_: string, ...args: string[]): number {
 		args,
 	}).values;
 
-	if(options.unset) {
+	if (options.unset) {
 		env.delete(options.unset);
 		return 0;
 	}

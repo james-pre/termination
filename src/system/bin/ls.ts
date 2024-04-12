@@ -11,7 +11,7 @@ async function color(dir: string, entry: string): Promise<string> {
 		if (stats.isSymbolicLink()) {
 			return `\x1b[36m${entry}\x1b[0m`;
 		}
-		
+
 		if (stats.isDirectory()) {
 			return `\x1b[34m${entry}\x1b[0m`;
 		}
@@ -27,8 +27,10 @@ async function color(dir: string, entry: string): Promise<string> {
 }
 
 export async function main(_, ...args: string[]): Promise<number> {
-
-	const { values: options, positionals: [dir = '.'] } = parseArgs({
+	const {
+		values: options,
+		positionals: [dir = '.'],
+	} = parseArgs({
 		options: {
 			list: { short: 'l', type: 'boolean' },
 		},

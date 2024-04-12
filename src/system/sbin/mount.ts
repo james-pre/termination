@@ -27,7 +27,7 @@ async function mount_fstab(): Promise<void> {
 }
 
 export async function main(_: string, ...args: string[]): Promise<number> {
-	if(args.includes('-a')) {
+	if (args.includes('-a')) {
 		await mount_fstab();
 		return 0;
 	}
