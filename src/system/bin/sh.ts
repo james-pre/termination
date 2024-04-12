@@ -38,7 +38,7 @@ try {
 
 env.set('USER', user.name);
 env.set('HOME', user.home);
-env.set('SHELL', user.shell)
+env.set('SHELL', user.shell);
 
 function prompt(): string {
 	return `[${user.name} ${basename(pwd()) || '/'}]${user.uid == 0 ? '#' : '$'} `;
@@ -88,7 +88,7 @@ async function on_data(data: string): Promise<void> {
 				inputs.unshift(input);
 			}
 			index = -1;
-			await on_line(...input.split(' '));
+			await on_line(...input.split(/\s+/).filter(e => e));
 			input = '';
 			clear();
 			break;
@@ -99,6 +99,10 @@ async function on_data(data: string): Promise<void> {
 }
 
 async function on_line(...args: string[]): Promise<number> {
+	if (args.length == 0) {
+		return;
+	}
+
 	const command: string = args.shift();
 
 	if (command == 'exit') {

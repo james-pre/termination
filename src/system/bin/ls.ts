@@ -36,8 +36,6 @@ export async function main(_, ...args: string[]): Promise<number> {
 		args,
 	});
 
-	console.log(dir)
-
 	const entries = [];
 	for (const entry of await fs.promises.readdir(dir)) {
 		const colored = await color(dir, entry);
