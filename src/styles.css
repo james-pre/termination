@@ -1,0 +1,7 @@
+@import url('@xterm/xterm/css/xterm.css');
+
+#term {
+	position: fixed;
+	inset: 0;
+	background-color: #000;
+}

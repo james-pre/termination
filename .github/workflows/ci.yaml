@@ -1,0 +1,53 @@
+name: Continuous Integration
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+    workflow_call:
+    pull_request:
+
+jobs:
+    ci:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+            pages: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deploy.outputs.page_url }}
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Formatting
+              run: npm run format:check
+
+            - name: Linting
+              run: npm run lint
+
+            - name: Build
+              run: npm run build
+
+            - name: Upload
+              uses: actions/upload-pages-artifact@v3
+              if: github.event_name != 'pull_request'
+              with:
+                  path: ./dist
+            - name: 'Deploy'
+              id: deploy
+              if: github.event_name != 'pull_request'
+              uses: actions/deploy-pages@v4

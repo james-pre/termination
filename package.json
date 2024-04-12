@@ -1,0 +1,57 @@
+{
+	"name": "terminator",
+	"private": true,
+	"version": "0.0.1",
+	"main": "dist/index.js",
+	"types": "dist",
+	"type": "module",
+	"homepage": "https://github.com/dr-vortex/terminator",
+	"author": "James P. <jp@drvortex.dev> (https://drvortex.dev)",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dr-vortex/terminator.git"
+	},
+	"bugs": {
+		"url": "https://github.com/dr-vortex/terminator/issues"
+	},
+	"engines": {
+		"node": ">= 18"
+	},
+	"exports": {
+		".": "./dist/index.js",
+		"./*": "./dist/*"
+	},
+	"typesVersions": {
+		"*": {
+			"*": [
+				"./dist/*"
+			]
+		}
+	},
+	"scripts": {
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"lint": "tsc -p tsconfig.json --noEmit && eslint src",
+		"build": "tsx scripts/build.ts",
+		"dev": "tsx scripts/build.ts --watch",
+		"prepublishOnly": "npm run build"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.55.0",
+		"@typescript-eslint/parser": "^5.55.0",
+		"cross-env": "^7.0.3",
+		"esbuild": "^0.17.18",
+		"eslint": "^8.36.0",
+		"prettier": "^3.2.5",
+		"tsx": "^4.7.2",
+		"typescript": "5.2.2"
+	},
+	"dependencies": {
+		"@xterm/addon-fit": "^0.10.0",
+		"@xterm/xterm": "^5.5.0",
+		"@zenfs/core": "^0.5.12",
+		"@zenfs/dom": "^0.1.4",
+		"@zenfs/fetch": "^0.1.0"
+	}
+}
