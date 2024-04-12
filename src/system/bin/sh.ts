@@ -1,4 +1,4 @@
-import { env_get } from 'lib:env';
+import env from 'lib:env';
 import { exec } from 'lib:exec';
 import { ErrorStrings, fs } from 'lib:fs';
 import { print, println, tty } from 'lib:io';
@@ -22,7 +22,11 @@ const inputs: string[] = [];
 
 let input: string = '';
 
-let exit;
+let exit: () => void;
+
+const can_exit: Promise<void> = new Promise(resolve => {
+	exit = resolve;
+});
 
 let user: User;
 try {
@@ -31,6 +35,10 @@ try {
 	user = _root;
 	println('Current user lookup failed, defaulting to root.');
 }
+
+env.set('USER', user.name);
+env.set('HOME', user.home);
+env.set('SHELL', user.shell)
 
 function prompt(): string {
 	return `[${user.name} ${basename(pwd()) || '/'}]${user.uid == 0 ? '#' : '$'} `;
@@ -94,13 +102,13 @@ async function on_line(...args: string[]): Promise<number> {
 	const command: string = args.shift();
 
 	if (command == 'exit') {
-		exit(0);
+		exit();
 		return;
 	}
 
 	let path: string;
 
-	for (const dir of env_get('PATH').split(':')) {
+	for (const dir of env.get('PATH').split(':')) {
 		try {
 			for (const file of await fs.promises.readdir(dir)) {
 				if (parse(file).name == command) {
@@ -113,8 +121,8 @@ async function on_line(...args: string[]): Promise<number> {
 		}
 	}
 
-	for(const [i, arg] of args.entries()) {
-		args[i] = arg.replaceAll(/\$([\w_]+)/gmi, (_, key) => env_get(key));
+	for (const [i, arg] of args.entries()) {
+		args[i] = arg.replaceAll(/\$([\w_]+)/gim, (_, key) => env.get(key));
 	}
 
 	if (!path) {
@@ -129,12 +137,15 @@ async function on_line(...args: string[]): Promise<number> {
 	}
 }
 
-export default function main(...args: string[]): Promise<number> {
+export async function main(_: string, ...args: string[]): Promise<number> {
+	if (args[1] == '-c') {
+		await on_line(...args.slice(2));
+	}
 	tty.write('\x1b[4h');
 	tty.focus();
-	tty.onData(on_data);
+	const { dispose } = tty.onData(on_data);
 	clear();
-	return new Promise(resolve => {
-		exit = resolve;
-	});
+	await can_exit;
+	dispose();
+	return 0;
 }

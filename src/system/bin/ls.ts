@@ -1,6 +1,7 @@
 import { join } from 'lib:path';
 import fs from 'lib:fs';
 import { println } from 'lib:io';
+import { parseArgs } from 'lib:args';
 
 async function color(dir: string, entry: string): Promise<string> {
 	try {
@@ -25,15 +26,17 @@ async function color(dir: string, entry: string): Promise<string> {
 	}
 }
 
-export async function main(_: string, ...args: string[]): Promise<number> {
-	args ||= ['.'];
-	const list = args.includes('-l');
+export async function main(_, ...args: string[]): Promise<number> {
 
-	if (list) {
-		args.splice(args.indexOf('-l'), 1);
-	}
+	const { values: options, positionals: [dir = '.'] } = parseArgs({
+		options: {
+			list: { short: 'l', type: 'boolean' },
+		},
+		allowPositionals: true,
+		args,
+	});
 
-	const dir = args.at(-1) || '.';
+	console.log(dir)
 
 	const entries = [];
 	for (const entry of await fs.promises.readdir(dir)) {
@@ -41,7 +44,7 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 		entries.push(colored);
 	}
 
-	if (!list) {
+	if (!options.list) {
 		println(entries.join(' '.repeat(4)));
 		return 0;
 	}
