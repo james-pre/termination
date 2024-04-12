@@ -2,7 +2,7 @@ import { readFile, stat, X_OK } from './fs.js';
 
 export async function _exec_external(url: string, ...args: string[]): Promise<number> {
 	const module = await import(url);
-	const main = 'main' in module ? module.main : module.default;
+	const main = 'main' in module ? module.main : 'default' in module ? module.default : () => null;
 	return await main(url, ...args);
 }
 
