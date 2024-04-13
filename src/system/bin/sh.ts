@@ -2,8 +2,8 @@ import env from 'lib:env';
 import { exec } from 'lib:exec';
 import { ErrorStrings, fs } from 'lib:fs';
 import { print, println, tty } from 'lib:io';
-import { basename, pwd, parse, resolve } from 'lib:path';
-import { User, _root, current_user } from 'lib:user';
+import { basename, parse, pwd, resolve } from 'lib:path';
+import { current_user } from 'lib:user';
 
 /**
  * The index for which input is being shown
@@ -28,31 +28,21 @@ const can_exit: Promise<void> = new Promise(resolve => {
 	exit = resolve;
 });
 
-let user: User;
-try {
-	user = await current_user();
-} catch (e) {
-	user = _root;
-	println('Current user lookup failed, defaulting to root.');
+async function prompt(): Promise<string> {
+	const { name, home, uid } = await current_user();
+	const dir = basename(pwd()) || '/';
+	return `[${name} ${dir == home ? '~' : dir}]${uid == 0 ? '#' : '$'} `;
 }
 
-env.set('USER', user.name);
-env.set('HOME', user.home);
-env.set('SHELL', user.shell);
-
-function prompt(): string {
-	return `[${user.name} ${basename(pwd()) || '/'}]${user.uid == 0 ? '#' : '$'} `;
-}
-
-function clear(): void {
-	print('\x1b[2K\r' + prompt());
+async function clear(): Promise<void> {
+	print('\x1b[2K\r' + (await prompt()));
 }
 
 async function on_data(data: string): Promise<void> {
 	if (index == -1) {
 		currentInput = input;
 	}
-	const promptLength = prompt().length;
+	const promptLength = (await prompt()).length;
 	const x = tty.buffer.active.cursorX - promptLength;
 	switch (data) {
 		case '\x1b[D':
@@ -61,7 +51,7 @@ async function on_data(data: string): Promise<void> {
 			break;
 		case 'ArrowUp':
 		case '\x1b[A':
-			clear();
+			await clear();
 			if (index < inputs.length - 1) {
 				input = inputs[++index];
 			}
@@ -69,7 +59,7 @@ async function on_data(data: string): Promise<void> {
 			break;
 		case 'ArrowDown':
 		case '\x1b[B':
-			clear();
+			await clear();
 			if (index >= 0) {
 				input = index-- == 0 ? currentInput : inputs[index];
 			}
@@ -90,7 +80,7 @@ async function on_data(data: string): Promise<void> {
 			index = -1;
 			await on_line(...input.split(/\s+/).filter(e => e));
 			input = '';
-			clear();
+			await clear();
 			break;
 		default:
 			print(data);
@@ -143,12 +133,12 @@ async function on_line(...args: string[]): Promise<number> {
 
 export async function main(_: string, ...args: string[]): Promise<number> {
 	if (args[1] == '-c') {
-		await on_line(...args.slice(2));
+		return await on_line(...args.slice(2));
 	}
 	tty.write('\x1b[4h');
 	tty.focus();
 	const { dispose } = tty.onData(on_data);
-	clear();
+	await clear();
 	await can_exit;
 	dispose();
 	return 0;

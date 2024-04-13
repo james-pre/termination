@@ -1,17 +1,22 @@
 import { println } from 'lib:io';
 import env from 'lib:env';
-import { parseArgs } from '@pkgjs/parseargs';
+import { parseArgs } from 'lib:args';
 
 export function main(_: string, ...args: string[]): number {
-	const options = parseArgs({
+	const { values: options, positionals: [key = null] } = parseArgs({
 		options: {
 			unset: { short: 'u', type: 'string' },
 		},
 		args,
-	}).values;
+	});
 
 	if (options.unset) {
 		env.delete(options.unset);
+		return 0;
+	}
+
+	if(key) {
+		println(`${key}=${env.get(key)}`);
 		return 0;
 	}
 

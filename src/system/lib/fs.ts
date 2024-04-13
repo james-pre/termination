@@ -3,6 +3,7 @@ import { exists, mkdir, readdir, symlink } from '@zenfs/core/emulation/promises.
 import { IndexedDB, Storage } from '@zenfs/dom';
 import { Fetch } from '@zenfs/fetch';
 import { join } from './path.js';
+import './user.js';
 
 export * from '@zenfs/core';
 
@@ -22,7 +23,7 @@ await configure({
 
 for (const dir of await readdir('/sys')) {
 	if (!(await exists(dir))) {
-		symlink(join('/sys', dir), dir);
+		symlink(join('/sys', dir), '/' + dir);
 	}
 }
 

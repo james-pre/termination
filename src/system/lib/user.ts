@@ -1,3 +1,4 @@
+import env from './env.js';
 import fs from './fs.js';
 
 import { cred } from '@zenfs/core/emulation/shared.js';
@@ -39,10 +40,12 @@ export async function get_users(): Promise<Set<User>> {
 
 export async function current_user(): Promise<User> {
 	for (const user of await get_users()) {
-		if (user.uid == cred.uid) {
+		if (user.name == env.get('USER')) {
 			return user;
 		}
 	}
+
+	throw new Error('No current user');
 }
 
 export async function get_user(param: string | number): Promise<User> {
@@ -54,4 +57,15 @@ export async function get_user(param: string | number): Promise<User> {
 			return user;
 		}
 	}
+}
+
+export async function set_user(param: string | number): Promise<User> {
+	const user = await get_user(param);
+	if(!user) {
+		throw new Error('User does not exist')
+	}
+	env.set('USER', user.name);
+	env.set('HOME', user.home);
+	env.set('SHELL', user.shell);
+	return user;
 }

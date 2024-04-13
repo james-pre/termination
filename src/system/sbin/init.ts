@@ -1,6 +1,7 @@
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { exec } from 'lib:exec';
+import { set_user } from 'lib:user';
 
 export async function main(...cmdline: string[]) {
 	const tty = (globalThis.tty = new Terminal());
@@ -9,5 +10,6 @@ export async function main(...cmdline: string[]) {
 	tty.open(document.querySelector<HTMLDivElement>('#term'));
 	fitAddon.fit();
 
+	await set_user(0);
 	await exec('/bin/sh.js');
 }
