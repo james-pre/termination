@@ -3,7 +3,10 @@ import env from 'lib:env';
 import { parseArgs } from 'lib:args';
 
 export function main(_: string, ...args: string[]): number {
-	const { values: options, positionals: [key = null] } = parseArgs({
+	const {
+		values: options,
+		positionals: [key = null],
+	} = parseArgs({
 		options: {
 			unset: { short: 'u', type: 'string' },
 		},
@@ -15,7 +18,7 @@ export function main(_: string, ...args: string[]): number {
 		return 0;
 	}
 
-	if(key) {
+	if (key) {
 		println(`${key}=${env.get(key)}`);
 		return 0;
 	}

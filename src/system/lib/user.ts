@@ -61,8 +61,8 @@ export async function get_user(param: string | number): Promise<User> {
 
 export async function set_user(param: string | number): Promise<User> {
 	const user = await get_user(param);
-	if(!user) {
-		throw new Error('User does not exist')
+	if (!user) {
+		throw new Error('User does not exist');
 	}
 	env.set('USER', user.name);
 	env.set('HOME', user.home);
