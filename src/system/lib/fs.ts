@@ -1,4 +1,4 @@
-import { InMemory, configure, resolveBackend } from '@zenfs/core';
+import { InMemory, configure, resolveMountConfig } from '@zenfs/core';
 import { exists, mkdir, readdir, symlink } from '@zenfs/core/emulation/promises.js';
 import { IndexedDB, Storage } from '@zenfs/dom';
 import { Fetch } from '@zenfs/fetch';
@@ -10,7 +10,7 @@ export * from '@zenfs/core';
 import fs from '@zenfs/core';
 export default fs;
 
-const fetchfs = await resolveBackend({ backend: Fetch, baseUrl: '/dist/system' });
+const fetchfs = await resolveMountConfig({ backend: Fetch, baseUrl: '/dist/system' });
 
 export const prefixUrl = fetchfs.prefixUrl;
 
@@ -22,7 +22,7 @@ await configure({
 });
 
 for (const dir of await readdir('/sys')) {
-	if (!(await exists(dir))) {
+	if (!(await exists('/' + dir))) {
 		symlink(join('/sys', dir), '/' + dir);
 	}
 }

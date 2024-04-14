@@ -20,7 +20,7 @@ async function mount_fstab(): Promise<void> {
 
 		const options = JSON.parse(_options.join(' '));
 
-		const filesystem = await zenfs.resolveBackend({ ...options, backend: get_backend(type) });
+		const filesystem = await zenfs.resolveMountConfig({ ...options, backend: get_backend(type) });
 
 		fs.mount(point, filesystem);
 	}

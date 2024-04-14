@@ -21,7 +21,7 @@ function resolveEntryPoint(path) {
 }
 
 const config: BuildOptions = {
-	entryPoints: ['src/index.html', './src/index.js', 'src/styles.css', ...resolveEntryPoint(resolve('src/system'))],
+	entryPoints: ['./src/index.html', './src/index.js', './src/styles.css', ...resolveEntryPoint('./src/system')],
 	target: 'es2022',
 	outdir: 'dist',
 	keepNames: true,
