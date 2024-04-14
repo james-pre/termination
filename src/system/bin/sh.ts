@@ -30,8 +30,8 @@ const can_exit: Promise<void> = new Promise(resolve => {
 
 async function prompt(): Promise<string> {
 	const { name, home, uid } = await current_user();
-	const dir = basename(pwd()) || '/';
-	return `[${name} ${dir == home ? '~' : dir}]${uid == 0 ? '#' : '$'} `;
+	const cwd = pwd();
+	return `[${name} ${cwd == home ? '~' : basename(cwd) || '/'}]${uid == 0 ? '#' : '$'} `;
 }
 
 async function clear(): Promise<void> {
