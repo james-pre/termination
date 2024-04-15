@@ -9,6 +9,7 @@ export async function main(...args: string[]) {
 	tty.open(document.querySelector<HTMLDivElement>('#term'));
 	fitAddon.fit();
 	console.debug('init@set_user()');
+	globalThis.tty_lock = 0;
 	await set_user(0);
 	const sh = await import('../bin/sh.js');
 	console.debug('init@sh.main()');

@@ -1,11 +1,13 @@
 import env from '../lib/env.js';
 import { _exec_external, exec } from '../lib/exec.js';
-import { ErrorStrings, fs } from '../lib/fs.js';
-import { print, println, tty } from '../lib/io.js';
+import { ErrorStrings, fs, size_max } from '../lib/fs.js';
+import { tty_lock, print, println, tty } from '../lib/io.js';
 import { basename, parse, pwd, resolve } from '../lib/path.js';
 import { current_user } from '../lib/user.js';
 
 console.debug('sh@top');
+
+const pid = Math.round(Math.random() * size_max);
 
 /**
  * The index for which input is being shown
@@ -41,6 +43,9 @@ async function clear(): Promise<void> {
 }
 
 async function on_data(data: string): Promise<void> {
+	if (tty_lock() != pid) {
+		return;
+	}
 	if (index == -1) {
 		currentInput = input;
 	}
@@ -135,6 +140,7 @@ async function on_line(...args: string[]): Promise<number> {
 	} catch (e) {
 		println('errno' in e ? ErrorStrings[e.errno] : e.message);
 	}
+	tty_lock(pid);
 }
 
 console.debug('sh@main');
@@ -145,6 +151,7 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 	}
 	tty.write('\x1b[4h');
 	tty.focus();
+	tty_lock(pid);
 	const { dispose } = tty.onData(on_data);
 	if (await fs.promises.exists('/etc/motd')) {
 		const motd = await fs.promises.readFile('/etc/motd', 'utf8');
