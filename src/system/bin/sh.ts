@@ -134,7 +134,7 @@ async function on_line(...args: string[]): Promise<number> {
 	try {
 		const realpath = await fs.promises.realpath(path);
 		if (realpath.startsWith('/sys/')) {
-			await _exec_external('/system/' + realpath.slice('/sys/'.length), ...args);
+			await _exec_external('./system/' + realpath.slice('/sys/'.length), ...args);
 		} else {
 			await exec(path, ...args);
 		}

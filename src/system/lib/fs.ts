@@ -4,7 +4,7 @@ import { IndexedDB, WebStorage } from '@zenfs/dom';
 import { Fetch } from '@zenfs/fetch';
 import { join } from './path.js';
 
-const fetchfs = await resolveMountConfig({ backend: Fetch, baseUrl: '/system' });
+const fetchfs = await resolveMountConfig({ backend: Fetch, baseUrl: './system' });
 
 export const prefixUrl = fetchfs.prefixUrl;
 
