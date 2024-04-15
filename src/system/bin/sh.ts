@@ -1,7 +1,7 @@
-import env from '../lib/env.js';
+import env, { get_cookie } from '../lib/env.js';
 import { _exec_external, exec } from '../lib/exec.js';
 import { ErrorStrings, fs, size_max } from '../lib/fs.js';
-import { tty_lock, print, println, tty } from '../lib/io.js';
+import { print, println, tty, tty_lock } from '../lib/io.js';
 import { basename, parse, pwd, resolve } from '../lib/path.js';
 import { current_user } from '../lib/user.js';
 
@@ -134,9 +134,11 @@ async function on_line(...args: string[]): Promise<number> {
 	try {
 		const realpath = await fs.promises.realpath(path);
 		if (realpath.startsWith('/sys/')) {
-			return await _exec_external('/system/' + realpath.slice('/sys/'.length), ...args);
+			await _exec_external('/system/' + realpath.slice('/sys/'.length), ...args);
+		} else {
+			await exec(path, ...args);
 		}
-		return await exec(path, ...args);
+		
 	} catch (e) {
 		println('errno' in e ? ErrorStrings[e.errno] : e.message);
 	}
@@ -153,7 +155,7 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 	tty.focus();
 	tty_lock(pid);
 	const { dispose } = tty.onData(on_data);
-	if (await fs.promises.exists('/etc/motd')) {
+	if (await fs.promises.exists('/etc/motd') && !get_cookie('battle_completed')) {
 		const motd = await fs.promises.readFile('/etc/motd', 'utf8');
 		println(motd);
 	}

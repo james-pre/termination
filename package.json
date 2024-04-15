@@ -53,7 +53,7 @@
 		"@types/pkgjs__parseargs": "^0.10.3",
 		"@xterm/addon-fit": "^0.10.0",
 		"@xterm/xterm": "^5.5.0",
-		"@zenfs/core": "^0.7.7",
+		"@zenfs/core": "^0.7.8",
 		"@zenfs/dom": "^0.2.0",
 		"@zenfs/fetch": "^0.1.4"
 	}
