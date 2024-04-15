@@ -138,7 +138,6 @@ async function on_line(...args: string[]): Promise<number> {
 		} else {
 			await exec(path, ...args);
 		}
-		
 	} catch (e) {
 		println('errno' in e ? ErrorStrings[e.errno] : e.message);
 	}
@@ -155,7 +154,7 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 	tty.focus();
 	tty_lock(pid);
 	const { dispose } = tty.onData(on_data);
-	if (await fs.promises.exists('/etc/motd') && !get_cookie('battle_completed')) {
+	if ((await fs.promises.exists('/etc/motd')) && !get_cookie('battle_completed')) {
 		const motd = await fs.promises.readFile('/etc/motd', 'utf8');
 		println(motd);
 	}

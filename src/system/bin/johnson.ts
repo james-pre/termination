@@ -176,7 +176,7 @@ async function print_delayed(): Promise<void> {
 	done = false;
 	let next: Output;
 	while ((next = toOutput.shift())) {
-		if(exited) {
+		if (exited) {
 			return;
 		}
 		const { text, delay } = next;
