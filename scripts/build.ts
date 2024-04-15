@@ -1,8 +1,9 @@
 import { BuildOptions, build, context } from 'esbuild';
 import { execSync } from 'node:child_process';
 import { readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
-import { join, resolve } from 'node:path/posix';
+import { join } from 'node:path/posix';
 import { parseArgs } from 'node:util';
+import FiveServer from 'five-server';
 
 const { keep, watch, sourcemap } = parseArgs({
 	options: {
@@ -45,7 +46,7 @@ const config: BuildOptions = {
 				});
 				onEnd(() => {
 					try {
-						execSync(`npx --package=@zenfs/core make-index -o dist/index.json dist/system`, { stdio: 'inherit' });
+						execSync(`npx --package=@zenfs/core make-index -o dist/index.json dist/system --quiet`, { stdio: 'inherit' });
 					} finally {
 						// nothing
 					}
@@ -56,9 +57,11 @@ const config: BuildOptions = {
 };
 
 if (watch) {
-	console.log('Watching for changes...');
 	const ctx = await context(config);
 	await ctx.watch();
+	const server = new FiveServer.default();
+	await server.start({ open: false, port: 8080, root: 'dist' });
+	console.log('Watching for changes...');
 } else {
 	await build(config);
 }

@@ -7,6 +7,7 @@
 		"noEmit": true,
 		"declaration": true,
 		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
 		"paths": {
 			"lib:*": ["./src/system/lib/*.js"]
 		}

@@ -43,6 +43,7 @@
 		"cross-env": "^7.0.3",
 		"esbuild": "^0.17.18",
 		"eslint": "^8.36.0",
+		"five-server": "^0.3.3",
 		"prettier": "^3.2.5",
 		"tsx": "^4.7.2",
 		"typescript": "5.2.2"
@@ -52,8 +53,8 @@
 		"@types/pkgjs__parseargs": "^0.10.3",
 		"@xterm/addon-fit": "^0.10.0",
 		"@xterm/xterm": "^5.5.0",
-		"@zenfs/core": "^0.6.0",
-		"@zenfs/dom": "^0.1.5",
-		"@zenfs/fetch": "^0.1.1"
+		"@zenfs/core": "^0.7.7",
+		"@zenfs/dom": "^0.2.0",
+		"@zenfs/fetch": "^0.1.4"
 	}
 }

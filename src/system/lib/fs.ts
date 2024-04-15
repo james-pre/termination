@@ -1,6 +1,6 @@
 import { InMemory, configure, resolveMountConfig } from '@zenfs/core';
 import { exists, mkdir, readdir, symlink } from '@zenfs/core/emulation/promises.js';
-import { IndexedDB, Storage } from '@zenfs/dom';
+import { IndexedDB, WebStorage } from '@zenfs/dom';
 import { Fetch } from '@zenfs/fetch';
 import { join } from './path.js';
 import './user.js';
@@ -10,12 +10,12 @@ export * from '@zenfs/core';
 import fs from '@zenfs/core';
 export default fs;
 
-const fetchfs = await resolveMountConfig({ backend: Fetch, baseUrl: '/dist/system' });
+const fetchfs = await resolveMountConfig({ backend: Fetch, baseUrl: '/system' });
 
 export const prefixUrl = fetchfs.prefixUrl;
 
 await configure({
-	'/': Storage,
+	'/': WebStorage,
 	'/sys': fetchfs,
 	'/home': IndexedDB,
 	'/tmp': InMemory,

@@ -138,6 +138,9 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 	tty.write('\x1b[4h');
 	tty.focus();
 	const { dispose } = tty.onData(on_data);
+	if (await fs.promises.exists('/etc/motd')) {
+		println(await fs.promises.readFile('/etc/motd', 'utf8'));
+	}
 	await clear();
 	await can_exit;
 	dispose();
