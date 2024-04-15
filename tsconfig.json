@@ -6,11 +6,7 @@
 		"moduleResolution": "NodeNext",
 		"noEmit": true,
 		"declaration": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"paths": {
-			"lib:*": ["./src/system/lib/*.js"]
-		}
+		"esModuleInterop": true
 	},
 	"include": ["src/**/*.ts", "scripts/**/*.ts"],
 	"exclude": ["node_modules"]

@@ -1,5 +1,5 @@
-import { println } from 'lib:io';
-import fs from 'lib:fs';
+import { println } from '../lib/io.js';
+import fs from '../lib/fs.js';
 
 export async function main(_: string, file: string): Promise<number> {
 	const contents = await fs.promises.readFile(file, 'utf-8');

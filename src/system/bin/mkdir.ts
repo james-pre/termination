@@ -1,5 +1,5 @@
-import fs from 'lib:fs';
-import { println } from 'lib:io';
+import fs from '../lib/fs.js';
+import { println } from '../lib/io.js';
 
 export async function main(_: string, dir: string): Promise<number> {
 	if (!dir) {

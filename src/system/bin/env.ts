@@ -1,6 +1,6 @@
-import { println } from 'lib:io';
-import env from 'lib:env';
-import { parseArgs } from 'lib:args';
+import { println } from '../lib/io.js';
+import env from '../lib/env.js';
+import { parseArgs } from '../lib/args.js';
 
 export function main(_: string, ...args: string[]): number {
 	const {

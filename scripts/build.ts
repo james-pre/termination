@@ -60,7 +60,13 @@ if (watch) {
 	const ctx = await context(config);
 	await ctx.watch();
 	const server = new FiveServer.default();
-	await server.start({ open: false, port: 8080, root: 'dist' });
+	await server.start({
+		open: false,
+		port: 8080,
+		root: 'dist',
+		injectBody: false,
+		injectCss: false,
+	});
 	console.log('Watching for changes...');
 } else {
 	await build(config);

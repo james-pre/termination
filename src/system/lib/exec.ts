@@ -14,5 +14,7 @@ export async function exec(path: string, ...args: string[]): Promise<number> {
 
 	const contents = await fs.promises.readFile(path, { flag: fs.constants.X_OK, encoding: 'utf8' });
 
-	return await _exec_external(URL.createObjectURL(new Blob([contents], { type: 'text/javascript' })), ...args);
+	const url = URL.createObjectURL(new Blob([contents], { type: 'text/javascript' }));
+	console.debug('exec()', path, url);
+	return await _exec_external(url, ...args);
 }

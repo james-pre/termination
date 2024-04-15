@@ -1,7 +1,7 @@
-import { join } from 'lib:path';
-import fs from 'lib:fs';
-import { println } from 'lib:io';
-import { parseArgs } from 'lib:args';
+import { join } from '../lib/path.js';
+import fs from '../lib/fs.js';
+import { println } from '../lib/io.js';
+import { parseArgs } from '../lib/args.js';
 
 async function color(dir: string, entry: string): Promise<string> {
 	try {

@@ -1,9 +1,11 @@
-import env from 'lib:env';
-import { exec } from 'lib:exec';
-import { ErrorStrings, fs } from 'lib:fs';
-import { print, println, tty } from 'lib:io';
-import { basename, parse, pwd, resolve } from 'lib:path';
-import { current_user } from 'lib:user';
+import env from '../lib/env.js';
+import { _exec_external, exec } from '../lib/exec.js';
+import { ErrorStrings, fs } from '../lib/fs.js';
+import { print, println, tty } from '../lib/io.js';
+import { basename, parse, pwd, resolve } from '../lib/path.js';
+import { current_user } from '../lib/user.js';
+
+console.debug('sh@top');
 
 /**
  * The index for which input is being shown
@@ -125,11 +127,17 @@ async function on_line(...args: string[]): Promise<number> {
 	}
 
 	try {
+		const realpath = await fs.promises.realpath(path);
+		if (realpath.startsWith('/sys/')) {
+			return await _exec_external('/system/' + realpath.slice('/sys/'.length), ...args);
+		}
 		return await exec(path, ...args);
 	} catch (e) {
 		println('errno' in e ? ErrorStrings[e.errno] : e.message);
 	}
 }
+
+console.debug('sh@main');
 
 export async function main(_: string, ...args: string[]): Promise<number> {
 	if (args[1] == '-c') {
@@ -139,7 +147,8 @@ export async function main(_: string, ...args: string[]): Promise<number> {
 	tty.focus();
 	const { dispose } = tty.onData(on_data);
 	if (await fs.promises.exists('/etc/motd')) {
-		println(await fs.promises.readFile('/etc/motd', 'utf8'));
+		const motd = await fs.promises.readFile('/etc/motd', 'utf8');
+		println(motd);
 	}
 	await clear();
 	await can_exit;

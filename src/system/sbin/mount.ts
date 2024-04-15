@@ -1,4 +1,4 @@
-import fs, * as zenfs from 'lib:fs';
+import fs, * as zenfs from '../lib/fs.js';
 
 function get_backend(type: string): zenfs.Backend {
 	if (!(type in zenfs) || !zenfs.isBackend(zenfs[type])) {

@@ -1,4 +1,4 @@
-import { println } from 'lib:io';
+import { println } from '../lib/io.js';
 import env from '../lib/env.js';
 
 export async function main(): Promise<number> {
