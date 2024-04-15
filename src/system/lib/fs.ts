@@ -3,8 +3,6 @@ import { exists, mkdir, readdir, symlink } from '@zenfs/core/emulation/promises.
 import { IndexedDB, WebStorage } from '@zenfs/dom';
 import { Fetch } from '@zenfs/fetch';
 import { join } from './path.js';
-export * from '@zenfs/core';
-export default fs;
 
 const fetchfs = await resolveMountConfig({ backend: Fetch, baseUrl: '/system' });
 
@@ -28,3 +26,6 @@ for (const dir of ['/root']) {
 		mkdir(dir);
 	}
 }
+
+export * from '@zenfs/core';
+export default fs;

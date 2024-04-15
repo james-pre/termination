@@ -23,7 +23,7 @@ export const _root: User = {
 
 export async function get_users(): Promise<Set<User>> {
 	const users = new Set<User>();
-	const passwd = await fs.promises.readFile('/etc/passwd', 'utf8');
+	const passwd = await fs.promises.readFile('/sys/etc/passwd', 'utf8');
 	for (const line of passwd.split('\n')) {
 		const [name, , uid, gid, description, home, shell] = line.split(':');
 		users.add({
