@@ -1,1 +1,3 @@
-# termination
+# Termination
+
+A terminal game
